@@ -15,6 +15,10 @@ class Moon(object):
         self.accs = None
         self.revaccs = np.array([(-G)*(self.mass/self.radius**2),0])
 
+
+    def Mvelocity(self,i):
+         return math.sqrt(self.velocity[i,0]**2+self.velocity[i,1]**2)
+
 class Planet(object):
 
     def __init__(self, mass):
@@ -22,6 +26,10 @@ class Planet(object):
         self.moons = []
         self.position = np.array([0,0])
         self.velocity = np.array([0,0])
+        self.energies = []
+
+    def Pvelocity(self,i):
+        return math.sqrt(self.velocity[i,0]**2+self.velocity[i,1]**2)
 
     def addMoon(self,moons):
         for i in moons:
@@ -36,6 +44,16 @@ class Planet(object):
     def direction(self,i):
         direct = self.position[i]-self.moons[0].position[i]
         return direct
+
+    def energy(self):
+        initial = 0.5*self.moons[0].mass*self.moons[0].Mvelocity(0)**2
+        quarter = 0.5*self.moons[0].mass*self.moons[0].Mvelocity(self.steps/4)**2 + 0.5*self.mass*self.Pvelocity(self.steps/4)**2
+        half = 0.5*self.moons[0].mass*self.moons[0].Mvelocity(self.steps/2)**2 + 0.5*self.mass*self.Pvelocity(self.steps/2)**2
+        threequarter = 0.5*self.moons[0].mass*self.moons[0].Mvelocity(3*self.steps/4)**2 + 0.5*self.mass*self.Pvelocity(3*self.steps/4)**2
+        final = 0.5*self.moons[0].mass*self.moons[0].Mvelocity(self.steps-1)**2 + 0.5*self.mass*self.Pvelocity(self.steps-1)**2
+
+        self.energies = [initial,quarter,half,threequarter,final]
+        
 
     def sim(self,stepLength,steps):
         self.steps = steps
@@ -100,13 +118,15 @@ def main():
     phobos = Moon(1.06*10**16,9.3773*10**6)
     mars = Planet(6.4185*10**23)
     mars.addMoon([phobos])
-    mars.sim(50,1000)
+    mars.sim(50,3000)
     mars.run()
-    diff = []
-    for i in range(0,len(phobos.position)):
-        a = math.sqrt(phobos.position[i,0]**2+phobos.position[i,1]**2)
-        diff.append(a-9.3773*10**6)
-    print diff
+    #diff = []
+    #for i in range(0,len(phobos.position)):
+        #a = math.sqrt(phobos.position[i,0]**2+phobos.position[i,1]**2)
+        #diff.append(a-9.3773*10**6)
+    #print diff
+    mars.energy()
+    print(mars.energies)
 
 
 main()
