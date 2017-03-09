@@ -1,0 +1,21 @@
+Planet
+mars
+mass 6.4185e23
+size 6792000
+color r
+
+moons
+phobos
+mass 1.06e16
+radius 9.3773e6
+size 223330
+color g
+
+break
+
+deimos
+mass 1.80e16
+radius 23.463e6
+size 124000
+color b
+

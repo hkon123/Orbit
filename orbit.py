@@ -1,4 +1,5 @@
 import math
+import time
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import numpy as np
@@ -152,8 +153,8 @@ class Planet(object):
 
         # set up the axes
         ax.axis('scaled')
-        ax.set_xlim(-(self.moons[0].radius+10**7), self.moons[0].radius+10**7)
-        ax.set_ylim(-(self.moons[0].radius+10**7), self.moons[0].radius+10**7)
+        ax.set_xlim(-(self.moons[1].radius+10**6), self.moons[1].radius+10**6)
+        ax.set_ylim(-(self.moons[1].radius+10**6), self.moons[1].radius+10**6)
         #ax.set_xlabel('x (rads)')
         #ax.set_ylabel('sin(x)')
 
@@ -165,25 +166,50 @@ class Planet(object):
 
 
 def main():
-
-
+    info =[]
+    
+    with open('info.txt','r') as f:
+        for line in f:
+            for word in line.split():
+                info.append(word)
+                                  
+    for i in range(0,len(info)):
+        if info[i] == 'mars':
+            marsMass=float(info[i+2])
+            marsSize=float(info[i+4])
+            marsColor=info[i+6]
+        if info[i]=='phobos':
+            phobosMass = float(info[i+2])
+            phobosRadius = float(info[i+4])
+            phobosSize = float(info[i+6])
+            phobosColor = info[i+8]
+        if info[i]== 'deimos':
+            deimosMass = float(info[i+2])
+            deimosRadius = float(info[i+4])
+            deimosSize = float(info[i+6])
+            deimosColor = info[i+8]
+            
+            
 
     
-    phobos = Moon(1.06*10**16,9.3773*10**6, 223330,'g')
-    deimos = Moon(1.80*10**15,23.463*10**6,124000,'b')
-    mars = Planet(6.4185*10**23,6792000,'r')
-    #mars.addMoon([phobos])
-    mars.addMoon([deimos])
+    phobos = Moon(phobosMass,phobosRadius, phobosSize,phobosColor)
+    deimos = Moon(deimosMass,deimosRadius,deimosSize,deimosColor)
+    mars = Planet(marsMass,marsSize,marsColor)
     mars.addMoon([phobos])
+    mars.addMoon([deimos])
     mars.sim(50,3000)
     mars.run()
-    #diff = []
-    #for i in range(0,len(phobos.position)):
-    #    a = math.sqrt(phobos.position[i,0]**2+phobos.position[i,1]**2)
-    #    diff.append(a-9.3773*10**6)
-    #print diff
     mars.energy()
-    print(deimos.period)
+
+    print("orbital periods:")
+    print("period for phobos: %.6g days" %phobos.period)
+    print("period for deimos: %.6g days" %deimos.period)
+    print("\n\n\n")
+    print("initial kinetic energy of the system: %.3g J" %mars.energies[0])
+    print("kinetic energy after 1/4 of the timesteps: %.3g J" %mars.energies[1])
+    print("kinetic energy after 1/2 of the timesteps: %.3g J" %mars.energies[2])
+    print("kinetic energy after 3/4 of the timesteps: %.3g J" %mars.energies[3])
+    print("kinetic energy after the simulation: %.3g J" %mars.energies[4])
 
 
 main()
