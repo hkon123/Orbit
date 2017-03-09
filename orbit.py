@@ -188,6 +188,10 @@ def main():
             deimosRadius = float(info[i+4])
             deimosSize = float(info[i+6])
             deimosColor = info[i+8]
+        if info[i] == 'steplength':
+            stepLength = int(info[i+1])
+        if info[i] == 'steps':
+            steps = int(info[i+1])
             
             
 
@@ -197,7 +201,7 @@ def main():
     mars = Planet(marsMass,marsSize,marsColor)
     mars.addMoon([phobos])
     mars.addMoon([deimos])
-    mars.sim(50,3000)
+    mars.sim(stepLength,steps)
     mars.run()
     mars.energy()
 

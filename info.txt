@@ -19,3 +19,5 @@ radius 23.463e6
 size 124000
 color b
 
+steplength 50
+steps 3000
